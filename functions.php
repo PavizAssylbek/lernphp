@@ -41,9 +41,8 @@ function login(string $email, string $password): bool {
     $pdo = new PDO("mysql:host=localhost;dbname=login", "root", "");
     $sql = "SELECT * FROM registration WHERE email=:email";
     $statement = $pdo->prepare($sql);
-    $statement->execute(["email" => $email,]);
+    $statement->execute(["email" => $email]);
     $user = $statement->fetchAll(PDO::FETCH_ASSOC);
-    // var_dump($user); die;
     $user_password_hash = $user[0]['password'];
     $password_verify = password_verify($password, $user_password_hash);
     return $password_verify;
