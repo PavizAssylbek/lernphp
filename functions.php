@@ -26,8 +26,8 @@ function set_flash_message(string $key, string $message) {
 function display_flash_message(string $key) {
     if(isset($_SESSION[$key])):
         echo "<div class=\"alert alert-{$key} text-dark\" role=\"alert\">";
-                echo $_SESSION[$key];
-                unset($_SESSION[$key]);
+        echo $_SESSION[$key];
+        unset($_SESSION[$key]);
        echo "</div>";
     endif;
 };
@@ -37,6 +37,36 @@ function redirect_to(string $path) {
     exit;
 };
 
+function get_all_users() {
+    $pdo = new PDO("mysql:host=localhost;dbname=login", "root", "");
+    $sql = 'SELECT * FROM registration';
+
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    return $statement->fetchAll();
+}
+
+function checkAdmin() {
+    if(isset($_SESSION["login"])) {
+        if($_SESSION["login"]['role'] == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    return false;
+}
+
+function checkMe() {
+    if(isset($_SESSION["login"])){
+        return $_SESSION["login"]["id"];
+    }
+    else {
+        return false;
+    }
+       
+}
+
 function login(string $email, string $password): bool {
     $pdo = new PDO("mysql:host=localhost;dbname=login", "root", "");
     $sql = "SELECT * FROM registration WHERE email=:email";
@@ -45,5 +75,6 @@ function login(string $email, string $password): bool {
     $user = $statement->fetchAll(PDO::FETCH_ASSOC);
     $user_password_hash = $user[0]['password'];
     $password_verify = password_verify($password, $user_password_hash);
+    $_SESSION['login'] = $user[0];
     return $password_verify;
 };

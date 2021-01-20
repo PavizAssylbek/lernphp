@@ -13,5 +13,5 @@ if(empty($login_verify)) {
 }
 $_SESSION["email"] = $email;
 set_flash_message("success", "Здравствуйте {$_SESSION["email"]}! Вы успешно авторизировались!");
-redirect_to("page_login.php");
+redirect_to("users.php");
 
