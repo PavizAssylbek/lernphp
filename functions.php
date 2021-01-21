@@ -1,6 +1,6 @@
 <?php
 
-function get_user_by_email(string $email) {
+function get_user_by_email(string $email): array {
     $pdo = new PDO("mysql:host=localhost;dbname=login", "root", "");
     $sql = "SELECT * FROM registration WHERE email=:email";
     $statement = $pdo->prepare($sql);
@@ -23,7 +23,7 @@ function set_flash_message(string $key, string $message) {
     $_SESSION[$key] = "$message";
 };
 
-function display_flash_message(string $key) {
+function display_flash_message(string $key): void {
     if(isset($_SESSION[$key])):
         echo "<div class=\"alert alert-{$key} text-dark\" role=\"alert\">";
         echo $_SESSION[$key];
@@ -37,7 +37,7 @@ function redirect_to(string $path) {
     exit;
 };
 
-function get_all_users() {
+function get_all_users():array {
     $pdo = new PDO("mysql:host=localhost;dbname=login", "root", "");
     $sql = 'SELECT * FROM registration';
 
@@ -46,7 +46,7 @@ function get_all_users() {
     return $statement->fetchAll();
 }
 
-function checkAdmin() {
+function checkAdmin():bool {
     if(isset($_SESSION["login"])) {
         if($_SESSION["login"]['role'] == 1) {
             return true;
@@ -57,7 +57,7 @@ function checkAdmin() {
     return false;
 }
 
-function checkMe() {
+function checkMe(): bool {
     if(isset($_SESSION["login"])){
         return $_SESSION["login"]["id"];
     }
